@@ -21,11 +21,15 @@ namespace SignalRApp
 
         public void Join(string room)
         {
+            if (!string.IsNullOrEmpty(Clients.Caller.currentChatRoom))
+                Groups.Remove(Context.ConnectionId, Clients.Caller.currentChatRoom);
+
             Groups.Add(Context.ConnectionId, room);
         }
 
-        public void Send(string room, string message)
+        public void Send(string message)
         {
+            string room = Clients.Caller.currentChatRoom;
             Clients.Group(room).addMessage(room, message);
         }
 
