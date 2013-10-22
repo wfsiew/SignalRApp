@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace SignalRApp.Controllers
 {
+    [Authorize]
     public class ChatController : Controller
     {
         //
