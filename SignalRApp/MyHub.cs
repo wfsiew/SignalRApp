@@ -12,8 +12,7 @@ namespace SignalRApp
     [Authorize(RequireOutgoing = true)]
     public class MyHub : Hub
     {
-        [Authorize]
-        [AuthAdmin]
+        [Authorize(Roles = "Admin")]
         public void CreateChatRoom(string room)
         {
             if (!ChatRooms.Exists(room))

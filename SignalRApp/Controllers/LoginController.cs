@@ -46,5 +46,12 @@ namespace SignalRApp.Controllers
 
             return View(account);
         }
+
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login");
+        }
 	}
 }

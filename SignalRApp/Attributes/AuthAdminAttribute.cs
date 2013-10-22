@@ -11,7 +11,7 @@ namespace SignalRApp.Attributes
     {
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-            return base.AuthorizeCore(httpContext);
+            return IsAdmin(httpContext.Session);
         }
 
         private bool IsAdmin(HttpSessionStateBase se)
