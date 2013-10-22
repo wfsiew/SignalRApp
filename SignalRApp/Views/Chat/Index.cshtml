@@ -27,61 +27,59 @@
 </table>
 
 <script type="text/javascript">
-    $(function () {
-        var currentChatRoom = 'Lobby';
+    var currentChatRoom = 'Lobby';
 
-        function addChatRoomToList(chatRoom) {
-            $('#chatRoomList').append($('<option value="' + chatRoom + '">' + chatRoom + '</option>'));
-        }
+    function addChatRoomToList(chatRoom) {
+        $('#chatRoomList').append($('<option value="' + chatRoom + '">' + chatRoom + '</option>'));
+    }
 
-        function addMessageToChatWindow(message) {
-            $('#chatWindow').val($('#chatWindow').val() + message + "\n");
-        }
+    function addMessageToChatWindow(message) {
+        $('#chatWindow').val($('#chatWindow').val() + message + "\n");
+    }
 
-        function clearChatRoomForRoomChange(chatRoom) {
-            $('#chatWindow').val('');
-            addMessageToChatWindow('Welcome to ' + chatRoom);
-        }
+    function clearChatRoomForRoomChange(chatRoom) {
+        $('#chatWindow').val('');
+        addMessageToChatWindow('Welcome to ' + chatRoom);
+    }
 
-        function init() {
-            var chat = $.connection.myHub;
+    function init() {
+        var chat = $.connection.myHub;
 
-            chat.client.addChatRoom = function (chatRoom) {
-                addChatRoomToList(chatRoom);
-                if (chatRoom == currentChatRoom) {
-                    $('#chatRoomList').val(currentChatRoom);
-                    addMessageToChatWindow('Welcome to ' + chatRoom);
-                }
+        chat.client.addChatRoom = function (chatRoom) {
+            addChatRoomToList(chatRoom);
+            if (chatRoom == currentChatRoom) {
+                $('#chatRoomList').val(currentChatRoom);
+                addMessageToChatWindow('Welcome to ' + chatRoom);
             }
+        }
 
-            chat.client.addMessage = function (room, message) {
-                if (room == currentChatRoom) {
-                    addMessageToChatWindow(message);
-                }
+        chat.client.addMessage = function (room, message) {
+            if (room == currentChatRoom) {
+                addMessageToChatWindow(message);
             }
+        }
 
-            $.connection.hub.start().done(function () {
-                $('#chatWindow').val('Connected\n');
-                chat.server.join(currentChatRoom);
+        $.connection.hub.start().done(function () {
+            $('#chatWindow').val('Connected\n');
+            chat.server.join(currentChatRoom);
 
-                $('#btnsend').click(function () {
-                    chat.server.send(currentChatRoom, $('#msg').val());
-                    $('#msg').val('');
-                });
-
-                $('#btncreate').click(function () {
-                    chat.server.createChatRoom($('#chatroom').val());
-                    $('#chatroom').val('');
-                });
-
-                $('#chatRoomList').change(function () {
-                    currentChatRoom = $('#chatRoomList option:selected').val();
-                    chat.server.join(currentChatRoom);
-                    clearChatRoomForRoomChange(currentChatRoom);
-                });
+            $('#btnsend').click(function () {
+                chat.server.send(currentChatRoom, $('#msg').val());
+                $('#msg').val('');
             });
-        }
 
-        $(init);
-    });
+            $('#btncreate').click(function () {
+                chat.server.createChatRoom($('#chatroom').val());
+                $('#chatroom').val('');
+            });
+
+            $('#chatRoomList').change(function () {
+                currentChatRoom = $('#chatRoomList option:selected').val();
+                chat.server.join(currentChatRoom);
+                clearChatRoomForRoomChange(currentChatRoom);
+            });
+        });
+    }
+
+    $(init);
 </script>
